@@ -70,9 +70,9 @@ Contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine BaRatin_LoadRCobject(Hobs,Hsigma,Qobs,Qsigma,& ! observations and uncertainties
-                        RCID,&               ! Rating Curve ID 
+                        RCID,&               ! Rating Curve ID
                         ControlMatrix,& ! optional Control Matrix for Laurent's general formalisation
-                        RemnantSigma_funk,& ! chosen f in sdev=f(Qrc) 
+                        RemnantSigma_funk,& ! chosen f in sdev=f(Qrc)
 				        PriorList_teta,PriorList_RemnantSigma,&
 				        err,mess)! error handling
 !^**********************************************************************
@@ -108,8 +108,8 @@ character(*), intent(in)::RCID
 integer(mik),intent(in),optional:: ControlMatrix(:,:)
 Type(PriorListType), intent(in)::PriorList_teta(:), PriorList_RemnantSigma(:)
 character(*),intent(in)::RemnantSigma_funk
-integer(mik), intent(out)::err        
-character(*),intent(out)::mess                   
+integer(mik), intent(out)::err
+character(*),intent(out)::mess
 ! locals
 character(250),parameter::procname='BaRatin_LoadRCobject'
 integer(mik)::nHerror
@@ -139,7 +139,10 @@ RC%nHerror=nHerror
 ! priors
 if(allocated(RC%PriorList_teta)) deallocate(RC%PriorList_teta);allocate(RC%PriorList_teta(RC%nteta))
 RC%PriorList_teta=PriorList_teta
-if(allocated(RC%PriorList_RemnantSigma)) deallocate(RC%PriorList_RemnantSigma);allocate(RC%PriorList_RemnantSigma(size(PriorList_RemnantSigma)))
+if(allocated(RC%PriorList_RemnantSigma)) then
+    deallocate(RC%PriorList_RemnantSigma)
+    allocate(RC%PriorList_RemnantSigma(size(PriorList_RemnantSigma)))
+endif
 RC%PriorList_RemnantSigma=PriorList_RemnantSigma
 ! control matrix
 if(present(ControlMatrix)) then
@@ -155,7 +158,7 @@ if(present(ControlMatrix)) then
     RC%ncontrol=size(ControlMatrix,dim=1)
 else
     RC%ncontrol=undefIN
-endif        
+endif
 RC%RemnantSigma_funk=RemnantSigma_funk
 call Sigmafunk_GetParNumber(RC%RemnantSigma_funk, RC%nsigmaf, err, mess)
 if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
@@ -212,7 +215,7 @@ integer(mik)::n, npar, i, ncontrol,range,j,SigmaFunk_np
 err=0;mess='';feas=.true.;isnull=.false.;lp=undefRN
 n=size(RC%Hobs)
 
-! Size checks 
+! Size checks
 if( size(Htrue)/=size(RC%Hobs)) then
     err=1;mess=trim(procname)//':'//trim(Baratin_Message(15));return
 endif
@@ -233,9 +236,9 @@ endif
 
 call Sigmafunk_GetParNumber(RC%RemnantSigma_funk, SigmaFunk_np, err, mess)
 if(err>0) then;mess=trim(procname)//':'//trim(mess);feas=.false.;return;endif
-if(size(RemnantSigma)/=SigmaFunk_np) then 
+if(size(RemnantSigma)/=SigmaFunk_np) then
     err=1;mess=trim(procname)//':'//trim(Baratin_Message(19));return
-endif   
+endif
 
 ! Get Prior
 call GetLogPrior(teta=RemnantSigma,PriorList=RC%PriorList_RemnantSigma,&
@@ -268,7 +271,7 @@ do i=1,n
                 feas=feas,isnull=isnull,err=err,mess=mess)
     if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
     if( (.not. feas) .or. isnull) return
-    Qlik=Qlik+logp    
+    Qlik=Qlik+logp
 enddo
 
 ! Get H-likelihood
@@ -277,7 +280,7 @@ do i=1,n
     if(RC%Hsigma(i) == 0._mrk) then ! no stage error
         if(Htrue(i) == RC%Hobs(i)) then !OK
             cycle
-        else ! not OK... 
+        else ! not OK...
             isnull=.true.;return
         endif
     endif
@@ -285,7 +288,7 @@ do i=1,n
                 feas=feas,isnull=isnull,err=err,mess=mess)
     if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
     if( (.not. feas) .or. isnull) return
-    Hlik=Hlik+logp    
+    Hlik=Hlik+logp
 enddo
 
 ! Get Posterior
@@ -334,7 +337,7 @@ real(mrk), allocatable:: Htrue(:)
 integer(mrk)::k, nHerror, i
 
 if( .not. RC%Herror ) then
-    call GetLogPost(teta=x(1:RC%nteta),RemnantSigma=x( (RC%nteta+1):(RC%nteta+RC%nsigmaf) ),Htrue=RC%Hobs,& 
+    call GetLogPost(teta=x(1:RC%nteta),RemnantSigma=x( (RC%nteta+1):(RC%nteta+RC%nsigmaf) ),Htrue=RC%Hobs,&
                     RC=RC,&
                     lp=fx, feas=feas, isnull=isnull,err=err,mess=mess)
 else
@@ -349,12 +352,12 @@ else
             k=k+1;Htrue(i)=x(RC%nteta+RC%nsigmaf+k)
         endif
     enddo
-    
-    call GetLogPost(teta=x(1:RC%nteta),RemnantSigma=x( (RC%nteta+1):(RC%nteta+RC%nsigmaf) ),Htrue=Htrue,& 
+
+    call GetLogPost(teta=x(1:RC%nteta),RemnantSigma=x( (RC%nteta+1):(RC%nteta+RC%nsigmaf) ),Htrue=Htrue,&
                     RC=RC,&
                     lp=fx, feas=feas, isnull=isnull,err=err,mess=mess)
-endif                  
-   
+endif
+
 if(present(fAux)) fAux=UndefRN
 
 end subroutine Posterior_wrapper
@@ -365,13 +368,13 @@ subroutine BaRatin_Fit(RC,& ! Rating curve object
                        !!!!!!! Tuning of the MCMC sampler !!!!!!!!
                        teta0,RemnantSigma0, &!initial values for teta and remnant std
 				       teta_std0,RemnantSigma_std0,& ! initial values for the std of jump distribution
-				       nAdapt,nCycles,& 
+				       nAdapt,nCycles,&
 				       MinMoveRate,MaxMoveRate,&
 				       DownMult,UpMult,&
                        !!!!!!! END Tuning of the MCMC sampler !!!!!!!!
 				       OutFile, & ! Output file (for MCMC samples)
 				       err,mess)! error handling
-				
+
 
 !^**********************************************************************
 !^* Purpose: Performs MCMC sampling
@@ -461,8 +464,8 @@ call Adaptive_Metro_OAAT(f=Posterior_wrapper,x=start,&
 				nAdapt=nAdapt,nCycles=nCycles,&
 				MinMoveRate=MinMoveRate,MaxMoveRate=MaxMoveRate,&
 				DownMult=DownMult,UpMult=UpMult,&
-				OutFile=OutFile,headers=headers, err=err,mess=mess)		
-				
+				OutFile=OutFile,headers=headers, err=err,mess=mess)
+
 end subroutine BaRatin_Fit
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -548,11 +551,12 @@ if(RC%RCID==RC_General) then
                 p=3*(i-1)
                 kRC(j,i-1)=mcmc(j,p+1);aRC(j,i)=mcmc(j,p+2);cRC(j,i)=mcmc(j,p+3)
             enddo
-        endif    
-        call RC_General_Continuity(a=aRC(j,:),c=cRC(j,:),k=kRC(j,:),ControlMatrix=RC%ControlMatrix,b=bRC(j,:),feas=feas,err=err,mess=mess)
+        endif
+        call RC_General_Continuity(a=aRC(j,:),c=cRC(j,:),k=kRC(j,:),ControlMatrix=RC%ControlMatrix,b=bRC(j,:),&
+                                   feas=feas,err=err,mess=mess)
         if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
     enddo
-    mcmc(:,(RC%nteta+RC%nsigmaf+RC%nHerror+2):(RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%ncontrol-1))=bRC(:,2:)   
+    mcmc(:,(RC%nteta+RC%nsigmaf+RC%nHerror+2):(RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%ncontrol-1))=bRC(:,2:)
 else
     if(associated(mcmc)) deallocate(mcmc);allocate(mcmc(n,RC%nteta+RC%nsigmaf+RC%nHerror+1))
     mcmc=Temp(1:n:nSlim,:)
@@ -615,8 +619,8 @@ integer(mik),intent(in),optional::RemnantOption
 logical, intent(in), optional::PrintCounter
 logical,intent(in)::SaveSpag,SaveEnvelop
 character(*), intent(in)::SpagFilePrefix,EnvelopFilePrefix
-integer(mik), intent(out)::err        
-character(*),intent(out)::mess                   
+integer(mik), intent(out)::err
+character(*),intent(out)::mess
 ! locals
 character(250), dimension(9),parameter::head_envelop=(/"H              ",&
                                                        "Q_Modal        ",&
@@ -634,6 +638,7 @@ real(mrk)::dev,res,h,teta(RC%nteta),gamma(RC%nsigmaf),Mteta(RC%nteta),Mgamma(RC%
 logical::feas,printC
 character(250),allocatable::head(:)
 real(mrk),allocatable::eps(:),spag(:),priorSample(:,:),b(:,:)
+character(250):: fmt
 
 err=0;mess=''
 
@@ -663,7 +668,7 @@ if(present(PrintCounter)) then;printC=PrintCounter;else;printC=.false.;endif
 NHx=size(Hx);
 
 ! prepare result files
-if(SaveSpag) then 
+if(SaveSpag) then
     call getSpareUnit(unt,err,mess)
     if(err/=0) then;mess=trim(procname)//':'//trim(mess);return;endif
     open(unt,file=trim(SpagFilePrefix)//'_'//&
@@ -672,20 +677,21 @@ if(SaveSpag) then
                 &trim(number_string(PropagateWhat(rcol)))//'.txt',status='replace')
     head(1)='H'
     do i=1,Nmcmc;head(i+1)="Q_"//trim(number_string(i));enddo
-    write(unt,'(<Nmcmc+1>A15)') head
+    fmt='('//trim(number_string(Nmcmc+1))//'A15)'
+    write(unt,trim(fmt)) head
 endif
-if(SaveEnvelop) then 
+if(SaveEnvelop) then
     call getSpareUnit(unt2,err,mess)
     if(err/=0) then;mess='BaRatin_H2Q:'//trim(mess);return;endif
     open(unt2,file=trim(EnvelopFilePrefix)//'_'//&
                 &trim(number_string(PropagateWhat(hcol)))//&
                 &trim(number_string(PropagateWhat(tcol)))//&
                 &trim(number_string(PropagateWhat(rcol)))//'.txt',status='replace')
-    write(unt2,'(<9>A15)') head_envelop
+    write(unt2,'(9A15)') head_envelop
 endif
 
 ! Go!!
-    
+
 ! Generate Remnant errors here if remnant error is systematic
 if(Ropt==0 .and. PropagateWhat(rcol)==1) then
     call GenerateSample(DistId=GAUSS,par=(/0._mrk,1._mrk/),&
@@ -706,8 +712,8 @@ else ! prior mode
         if(.not.feas) then
             err=1;mess=trim(procname)//':'//trim(Baratin_Message(10));return
         endif
-    enddo   
-    Mgamma=undefRN 
+    enddo
+    Mgamma=undefRN
 endif
 
 ! generate prior sample if required
@@ -795,7 +801,8 @@ do j=1,NHx ! loop on stage values
     enddo
     if(SaveSpag) then
         ! write spaghetti to file
-        write(unt,'(<Nmcmc+1>e15.6)') Hx(j),spag
+        fmt='('//trim(number_string(Nmcmc+1))//'e15.6)'
+        write(unt,trim(fmt)) Hx(j),spag
     endif
     if(SaveEnvelop) then
         ! Get envelop and write it
@@ -821,8 +828,8 @@ use numerix_dmsl_kit, only:quicksort
 real(mrk), intent(in)::Hx,mode(:),Spag(:)
 type(RCType), intent(in)::RC
 real(mrk),intent(out)::Env(:)
-integer(mik), intent(out)::err        
-character(*),intent(out)::mess                   
+integer(mik), intent(out)::err
+character(*),intent(out)::mess
 ! locals
 character(250),parameter::procname='BaRatin_GetEnvelop'
 integer(mik)::i
@@ -875,7 +882,7 @@ subroutine BaRatin_PostProcess(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
                         SaveCooked,&
 				        err,mess)! error handling
 !^**********************************************************************
-!^* Purpose: post-process MCMC samples and write result files for 
+!^* Purpose: post-process MCMC samples and write result files for
 !^* subsequent use, in particular for subsequent plots
 !^**********************************************************************
 !^* Programmer: Ben Renard, Irstea Lyon
@@ -915,8 +922,8 @@ integer(mik), intent(in)::Nburn,Nread,Nslim,propagationMatrix(:,:)
 real(mrk), intent(in)::Hx(:)
 type(RCType),intent(in):: RC
 logical,intent(in)::SaveSpag,SaveEnvelop,SaveSummary,saveHQ,saveCooked
-integer(mik), intent(out)::err        
-character(*),intent(out)::mess                   
+integer(mik), intent(out)::err
+character(*),intent(out)::mess
 !locals
 character(250), dimension(16),parameter::lefters=(/"N              ",&
                                                    "Minimum        ",&
@@ -956,7 +963,8 @@ real(mrk),pointer::mcmc(:,:),SpagTeta(:,:),SpagTot(:,:)
 character(250), allocatable::headers(:)
 logical::feas
 real(mrk)::std,u5,u25,gen
-                               
+character(250)::fmt
+
 err=0;mess=''
 
 ! Read MCMC
@@ -968,7 +976,8 @@ ml=maxloc(mcmc(:,RC%nteta+RC%nsigmaf+RC%nHerror+1))
 if(saveCooked) then
     open(unit=1,file=trim(CookedMCMCFile),status='replace')
     write(1,*) "Proper headers to be implemented..."
-    do i=1,nMCMC;write(1,'(<nCol>e15.6)') mcmc(i,:);enddo
+    fmt='('//trim(number_string(nCol))//'e15.6)'
+    do i=1,nMCMC;write(1,trim(fmt)) mcmc(i,:);enddo
     close(1)
 endif
 
@@ -1016,14 +1025,18 @@ if(SaveSummary) then
     else
         nh=RC%nteta+RC%nsigmaf+RC%nHerror+1
     endif
-    write(1,'(<nH>A15)') "Stat           ",headers
+    fmt='('//trim(number_string(nH))//'A15)'
+    write(1,trim(fmt)) "Stat           ",headers
+
+    fmt='(A15,'//trim(number_string(nH))//'e15.6)'
     do i=1,15
-        write(1,'(A15,<nH>e15.6)') lefters(i), Summary(i,:)
+        write(1,trim(fmt)) lefters(i), Summary(i,:)
     enddo
     if(RC%RCID==RC_General) then
-        write(1,'(A15,<nH>e15.6)') lefters(16), mcmc(ml(1),1:(RC%nteta+RC%nsigmaf+RC%nHerror)),mcmc(ml(1),(RC%nteta+RC%nsigmaf+RC%nHerror+2):(RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%ncontrol-1))
+        write(1,trim(fmt)) lefters(16), mcmc(ml(1),1:(RC%nteta+RC%nsigmaf+RC%nHerror)),&
+          mcmc(ml(1),(RC%nteta+RC%nsigmaf+RC%nHerror+2):(RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%ncontrol-1))
     else
-        write(1,'(A15,<nH>e15.6)') lefters(16), mcmc(ml(1),1:(nh-1))
+        write(1,trim(fmt)) lefters(16), mcmc(ml(1),1:(nh-1))
     endif
     close(1)
 endif
@@ -1049,7 +1062,7 @@ enddo
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! STEP 2 : H-Q data summary !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-if(SaveHQ) then 
+if(SaveHQ) then
     ! get 5% and 25% u-quantiles from a N(0,1)
     ! Replaced by 2.5% and 16% on Jerome request (bloody hydraulicians!)
     call GetQuantile(DistId=GAUSS,p=0.025_mrk,par=(/0._mrk,1._mrk/),q=u5,feas=feas,err=err,mess=mess)
@@ -1081,7 +1094,7 @@ if(SaveHQ) then
         DS(i,15)=RC%Qobs(i)+RC%Qsigma(i)
     enddo
     open(unit=1,file=trim(HQFile),status='replace')
-    write(1,'(<15>A15)') headers2
+    write(1,'(15A15)') headers2
     do i=1,RC%nobs;write(1,'(15e15.6)') DS(i,:);enddo
 close(1)
 endif
@@ -1130,8 +1143,8 @@ character(*), intent(in)::MCMCFile, HFile, SpagFile,EnvFile
 integer(mik), intent(in)::Nburn,Nread,Nslim,propagationMatrix(:,:)
 type(RCType),intent(in):: RC
 logical,intent(in)::SaveSpag,SaveEnvelop
-integer(mik), intent(out)::err        
-character(*),intent(out)::mess                   
+integer(mik), intent(out)::err
+character(*),intent(out)::mess
 !locals
 character(250),parameter::procname='BaRatin_Propagation'
 integer(mik),parameter::ncol=4
@@ -1173,7 +1186,7 @@ end subroutine BaRatin_Propagation
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-pure subroutine Sigmafunk_GetParNumber(funk, npar, err, mess)   
+pure subroutine Sigmafunk_GetParNumber(funk, npar, err, mess)
 
 !^**********************************************************************
 !^* Purpose: Get number of parameters of the selected Sigmafunk
@@ -1313,9 +1326,9 @@ open(unit=unt,file=trim(file), status='old', iostat=err)
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Open,trim(file));endif
 read(unt,*,iostat=err) workspace
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-close(unt)    
+close(unt)
 
-end subroutine BaRatinConfig_Read_Workspace  
+end subroutine BaRatinConfig_Read_Workspace
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1377,7 +1390,7 @@ read(unt,*,iostat=err) QsigmaCol
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 close(unt)
 
-end subroutine BaRatinConfig_Read_Data  
+end subroutine BaRatinConfig_Read_Data
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1492,7 +1505,7 @@ if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 
 close(unt)
 
-end subroutine BaRatinConfig_Read_MCMC  
+end subroutine BaRatinConfig_Read_MCMC
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1544,8 +1557,8 @@ read(unt,*,iostat=err) RCID
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) nTeta
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-if(associated(PriorList_teta)) deallocate(PriorList_teta);allocate(PriorList_teta(nTeta))    
-if(associated(teta0)) deallocate(teta0);allocate(teta0(nTeta))    
+if(associated(PriorList_teta)) deallocate(PriorList_teta);allocate(PriorList_teta(nTeta))
+if(associated(teta0)) deallocate(teta0);allocate(teta0(nTeta))
 do i=1,nteta
     read(unt,*,iostat=err)
     if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
@@ -1557,13 +1570,13 @@ do i=1,nteta
     call GetParNumber(DistID=PriorList_teta(i)%dist, npar=np, err=err, mess=mess)
     if(err/=0) then;mess=trim(procname)//':'//trim(mess);return;endif
     if(allocated(PriorList_teta(i)%par)) deallocate(PriorList_teta(i)%par)
-    allocate(PriorList_teta(i)%par(np))        
+    allocate(PriorList_teta(i)%par(np))
     read(unt,*,iostat=err) PriorList_teta(i)%par(:)
     if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 enddo
 close(unt)
 
-end subroutine BaRatinConfig_Read_RatingCurve  
+end subroutine BaRatinConfig_Read_RatingCurve
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1617,7 +1630,7 @@ open(unit=unt,file=trim(file), status='old', iostat=err)
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Open,trim(file));endif
 
 ncontrol=nTeta/nElementalRC
-if(associated(ControlMatrix)) deallocate(ControlMatrix);allocate(ControlMatrix(ncontrol,ncontrol))    
+if(associated(ControlMatrix)) deallocate(ControlMatrix);allocate(ControlMatrix(ncontrol,ncontrol))
 call ReadData_i(DataFile=file,unt=unt,&
                 nrow=ncontrol,ncol=ncontrol,nHeader=nHeaderControlMatrix,&
                 X=ControlMatrix,err=err,mess=mess)
@@ -1625,7 +1638,7 @@ if(err/=0) then;mess=trim(procname)//':'//trim(mess);return;endif
 call RC_General_CheckControlMatrix(ControlMatrix,feas,err,mess)
 if((.not.feas).or.(err/=0)) then;mess=trim(procname)//':'//trim(mess);return;endif
 close(unt)
-end subroutine BaRatinConfig_Read_ControlMatrix  
+end subroutine BaRatinConfig_Read_ControlMatrix
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1697,13 +1710,13 @@ do i=1,SigmaFunk_np
     call GetParNumber(DistID=PriorList_RemnantSigma(i)%dist, npar=np, err=err, mess=mess)
     if(err/=0) then;mess=trim(procname)//':'//trim(mess);return;endif
     if(allocated(PriorList_RemnantSigma(i)%par)) deallocate(PriorList_RemnantSigma(i)%par)
-    allocate(PriorList_RemnantSigma(i)%par(np))        
+    allocate(PriorList_RemnantSigma(i)%par(np))
     read(unt,*,iostat=err) PriorList_RemnantSigma(i)%par(:)
     if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 enddo
-close(unt) 
+close(unt)
 
-end subroutine BaRatinConfig_Read_RemnantSigma  
+end subroutine BaRatinConfig_Read_RemnantSigma
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1746,7 +1759,7 @@ err=0;mess=''
 call getSpareUnit(unt,err,mess)
 if(err/=0) then;mess=trim(procname)//':'//trim(mess);return;endif
 inquire(file=trim(file),exist=exist)
-if(exist) then ! 
+if(exist) then !
     open(unit=unt,file=trim(file), status='old', iostat=err)
     if(err>0) then;call BaRatin_ConsoleMessage(messID_Open,trim(file));endif
     read(unt,*,iostat=err) DoPriorRC
@@ -1757,7 +1770,7 @@ if(exist) then !
     if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
     read(unt,*,iostat=err) DoH2Q
     if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-    close(unt)    
+    close(unt)
 else ! default settings - MCMC+PostProcess only
     DoMCMC=.true.
     DoPostProcess=.true.
@@ -1765,7 +1778,7 @@ else ! default settings - MCMC+PostProcess only
     DoH2Q=.false.
 endif
 
-end subroutine BaRatinConfig_Read_RunOptions  
+end subroutine BaRatinConfig_Read_RunOptions
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1826,9 +1839,9 @@ read(unt,*,iostat=err) saveEnvelop
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) EnvelopPrefix
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-close(unt) 
+close(unt)
 
-end subroutine BaRatinConfig_Read_PriorRC  
+end subroutine BaRatinConfig_Read_PriorRC
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1926,9 +1939,9 @@ do i=1,nrow
     read(unt,*,iostat=err) PropMatrix(i,(/tcol,rcol/))
     if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 enddo
-close(unt) 
+close(unt)
 
-end subroutine BaRatinConfig_Read_PostProcessing   
+end subroutine BaRatinConfig_Read_PostProcessing
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1994,9 +2007,9 @@ do i=1,nrow
     read(unt,*,iostat=err) PropMatrix(i,:)
     if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 enddo
-close(unt) 
+close(unt)
 
-end subroutine BaRatinConfig_Read_H2QPropagation 
+end subroutine BaRatinConfig_Read_H2QPropagation
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -2025,7 +2038,7 @@ subroutine BaRatinConfig_Read_Aggregation(file,&
 !^*		1. All parameters in Config_BaRatinAggregator
 !^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
 !^*		3.mess, error message
-!^**********************************************************************                                   
+!^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
 real(mrk),intent(out)::mvcode
@@ -2047,54 +2060,54 @@ if(err>0) then;call BaRatin_ConsoleMessage(messID_Open,trim(file));endif
 
 read(unt,*,iostat=err) ! Cosmetics
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Tfile_IN 
+read(unt,*,iostat=err) Tfile_IN
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Tfile_nhead 
+read(unt,*,iostat=err) Tfile_nhead
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) nT 
+read(unt,*,iostat=err) nT
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Tformat_IN 
+read(unt,*,iostat=err) Tformat_IN
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Tfile_OUT 
+read(unt,*,iostat=err) Tfile_OUT
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Tformat_OUT 
+read(unt,*,iostat=err) Tformat_OUT
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Sfile_IN 
+read(unt,*,iostat=err) Sfile_IN
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Sfile_nhead 
+read(unt,*,iostat=err) Sfile_nhead
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) nspag 
+read(unt,*,iostat=err) nspag
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) mvcode 
+read(unt,*,iostat=err) mvcode
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) Sfile_OUT 
-if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) ! Cosmetics
-if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) FirstDate 
-if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) LastDate 
-if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) scale 
-if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) scalemult 
+read(unt,*,iostat=err) Sfile_OUT
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) ! Cosmetics
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) funk 
+read(unt,*,iostat=err) FirstDate
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) safeMV 
+read(unt,*,iostat=err) LastDate
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) safeInterpol 
+read(unt,*,iostat=err) scale
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-read(unt,*,iostat=err) option 
+read(unt,*,iostat=err) scalemult
+if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
+read(unt,*,iostat=err) ! Cosmetics
+if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
+read(unt,*,iostat=err) funk
+if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
+read(unt,*,iostat=err) safeMV
+if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
+read(unt,*,iostat=err) safeInterpol
+if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
+read(unt,*,iostat=err) option
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 close(unt)
-end subroutine BaRatinConfig_Read_Aggregation                          
-                                   
+end subroutine BaRatinConfig_Read_Aggregation
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-pure function BaRatin_Message(id) 
+pure function BaRatin_Message(id)
 ! returns error/warning messages
 integer(mik),intent(in)::id
 character(250)::BaRatin_Message
@@ -2144,7 +2157,7 @@ case default
     BaRatin_Message='unknown message ID'
 end select
 
-end function BaRatin_Message 
+end function BaRatin_Message
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -2154,7 +2167,7 @@ integer(mik),intent(in)::id
 character(*), intent(in)::mess
 
 select case(id)
-case (1) ! Welcome! 
+case (1) ! Welcome!
     write(*,*) ''
     write(*,*) '*********************************'
     write(*,*) '*********************************'
@@ -2198,7 +2211,7 @@ case(6)
     write(*,*) '**     Post-processing...      **'
     write(*,*) '*********************************'
     write(*,*) ''
-case(7) 
+case(7)
     write(*,*) ''
     write(*,*) '*********************************'
     write(*,*) '**   Post-processing : DONE!   **'
@@ -2228,7 +2241,7 @@ case(11)
     write(*,*) '** Reading config files: DONE! **'
     write(*,*) '*********************************'
     write(*,*) ''
-case (101) ! Aggregator welcome 
+case (101) ! Aggregator welcome
     write(*,*) ''
     write(*,*) '*********************************'
     write(*,*) '*********************************'
@@ -2250,14 +2263,14 @@ case(999) ! Ciao!
     write(*,*) ''
     write(*,*) 'Thanx for using me...'
     write(*,*) 'Press [enter] and I''ll go away'
-case (-1) ! Fatal Error - general 
+case (-1) ! Fatal Error - general
     write(*,*) ""
     write(*,*) "BaRatin: a FATAL ERROR has occured:"
     write(*,*) trim(mess)
     write(*,*) "Execution will stop"
     write(*,*) ""
     call BaRatin_Fatal_Exit
-case(-2) ! Fatal Error - Open File 
+case(-2) ! Fatal Error - Open File
     write(*,*) ""
     write(*,*) "BaRatin: a FATAL ERROR has occured"
     write(*,*) "while opening the following file."
@@ -2327,7 +2340,7 @@ case default
     call BaRatin_Fatal_Exit
 end select
 
-end subroutine BaRatin_ConsoleMessage 
+end subroutine BaRatin_ConsoleMessage
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

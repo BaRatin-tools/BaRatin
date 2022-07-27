@@ -28,7 +28,7 @@ character(250),parameter::  Config_BaRatin="Config_BaRatin.txt",&
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BaRatin tuning - Variables to be read from input file
 character(250):: DataFile ! path to datafile
-character(250):: HHFile ! path to limnograph 
+character(250):: HHFile ! path to limnograph
 integer(mik):: nobs       ! number of obs in Data file
 integer(mik):: ncol       ! number of columns in Data file
 integer(mik):: nHeader    ! number of header lines to skip in the data file
@@ -69,11 +69,11 @@ logical(mlk)::feas,exist
 
 ! determine dirsep according to OS
 !DEC$ IF DEFINED(_WIN32)
-    dirsep=dirSepChar_win
+    dirsep=dirSepCH_win
 !DEC$ ELSEIF DEFINED(__linux)
-    dirsep=dirSepChar_lix
+    dirsep=dirSepCH_lix
 !DEC$ ELSE
-    dirsep=dirSepChar_win
+    dirsep=dirSepCH_win
 !DEC$ ENDIF
 
 ! Welcome user and read Workspace
@@ -147,9 +147,9 @@ call BaRatin_ConsoleMessage(11,'')
 
 ! load rating curve object
 call BaRatin_LoadRCobject(Hobs,Hsigma,Qobs,Qsigma,& ! observations and uncertainties
-                        RCID,&               ! Rating Curve ID 
+                        RCID,&               ! Rating Curve ID
                         ControlMatrix,& ! optional Control Matrix for Laurent's general formalisation
-                        RemnantSigma_funk,& ! [option 2] chosen f in sdev=f(Qrc) 
+                        RemnantSigma_funk,& ! [option 2] chosen f in sdev=f(Qrc)
 				        PriorList_teta,PriorList_RemnantSigma,&
 				        err,mess)! error handling
 if(err>0) then; call BaRatin_ConsoleMessage(-1,trim(mess));endif
@@ -198,7 +198,7 @@ if (DoMCMC) then
                      !!!!!!! Tuning of the MCMC sampler !!!!!!!!
                      teta0=teta0,RemnantSigma0=RemnantSigma0, &!initial values for teta and remnant std
 				     teta_std0=teta_std0,RemnantSigma_std0=RemnantSigma_std0,& ! initial values for the std of jump distribution
-				     nAdapt=nAdapt,nCycles=nCycles,& 
+				     nAdapt=nAdapt,nCycles=nCycles,&
 				     MinMoveRate=MinMoveRate,MaxMoveRate=MaxMoveRate,&
 				     DownMult=DownMult,UpMult=UpMult,&
                      !!!!!!! END Tuning of the MCMC sampler !!!!!!!!
@@ -255,14 +255,14 @@ if(DoH2Q) then
                                    SaveSpag=SaveSpag_prop,SpagPrefix=SpagPrefix_prop,&
                                    SaveEnvelop=SaveEnvelop_prop,EnvelopPrefix=EnvelopPrefix_prop,&
                                    PropMatrix=PropMatrix_prop,&
-                                   err=err,mess=mess)   
+                                   err=err,mess=mess)
     if(err>0) then; call BaRatin_ConsoleMessage(-1,trim(mess));endif
     call BaRatin_Propagation(MCMCFile=trim(workspace)//dirsep//trim(MCMCfile),&
-                        Nburn=Nburn,Nread=Nread,Nslim=Nslim,& 
-                        Hfile=trim(HHFile),&  
-                        RC=RC,&                  
-                        SpagFile=trim(workspace)//dirsep//trim(SpagPrefix_prop), & 
-                        EnvFile=trim(workspace)//dirsep//trim(EnvelopPrefix_prop), & 
+                        Nburn=Nburn,Nread=Nread,Nslim=Nslim,&
+                        Hfile=trim(HHFile),&
+                        RC=RC,&
+                        SpagFile=trim(workspace)//dirsep//trim(SpagPrefix_prop), &
+                        EnvFile=trim(workspace)//dirsep//trim(EnvelopPrefix_prop), &
                         SaveSpag=SaveSpag_prop,&
                         SaveEnvelop=SaveEnvelop_prop,&
                         propagationMatrix=PropMatrix_prop,& ! let the user define what is propagated and what is not

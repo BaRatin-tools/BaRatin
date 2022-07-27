@@ -243,14 +243,16 @@ if(nrange>1) then ! check each change of range activates exactly one control
     do i=2,nrange
         mask=ControlMatrix(i,:) - ControlMatrix(i-1,:)>0
         if (count(mask)/=1) then
-            err=4;mess='RC_General_CheckControlMatrix:FATAL: Exactly one control should be activated when changing range';feas=.false.;return
+            err=4;mess='RC_General_CheckControlMatrix:FATAL: Exactly one control should be activated when changing range'
+            feas=.false.;return
         endif
     enddo
 endif
 
 do i=1,nrange ! check that change to the kth range activates the kth control
     if(ControlMatrix(i,i)/=1) then
-        err=5;mess='RC_General_CheckControlMatrix:FATAL: change to the kth range should activate the kth control';feas=.false.;return
+        err=5;mess='RC_General_CheckControlMatrix:FATAL: change to the kth range should activate the kth control'
+        feas=.false.;return
     endif
 enddo
 
