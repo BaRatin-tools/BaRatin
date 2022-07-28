@@ -20,8 +20,7 @@ DMSL = \
 	$(DMSL_DIR)mt19937-64.f95                  \
 	$(DMSL_DIR)uniran1_minidmsl_mod.f90        \
 	$(DMSL_DIR)linalg_dmsl_kit.f90             \
-	$(DMSL_DIR)numerix_dmsl_kit.f90            \
-	$(DMSL_DIR)dynamicModelLibrary.f90
+	$(DMSL_DIR)numerix_dmsl_kit.f90
 
 # Define BMSL files
 BMSL = \
