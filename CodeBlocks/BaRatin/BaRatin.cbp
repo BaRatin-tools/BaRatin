@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="BaRatin" />
+		<Option pch_mode="2" />
+		<Option compiler="gfortran" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/BaRatin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/BaRatin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gfortran" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-Wall" />
+					<Add option="-fcheck=all" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../../../BMSL/src/Aggregation_tools.f90">
+			<Option weight="42" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/BayesianEstimation_tools.f90">
+			<Option weight="56" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/DataRW_tools.f90">
+			<Option weight="48" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/Dates_tools.f90">
+			<Option weight="40" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/Distribution_tools.f90" />
+		<Unit filename="../../../BMSL/src/EmpiricalStats_tools.f90">
+			<Option weight="44" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/MCMCStrategy_tools.f90">
+			<Option weight="54" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/MCMC_tools.f90">
+			<Option weight="52" />
+		</Unit>
+		<Unit filename="../../../BMSL/src/TimeSeries_tools.f90">
+			<Option weight="46" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/kinds_dmsl_kit.f90">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/linalg_dmsl_kit.f90">
+			<Option weight="10" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/mt19937-64.f95">
+			<Option weight="6" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/numerix_dmsl_kit.f90">
+			<Option weight="12" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/types_dmsl_kit.f90">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/uniran1_minidmsl_mod.f90">
+			<Option weight="8" />
+		</Unit>
+		<Unit filename="../../../miniDMSL/src/utilities_dmsl_kit.f90">
+			<Option weight="4" />
+		</Unit>
+		<Unit filename="../../src/BaRatin_tools.f90">
+			<Option weight="90" />
+		</Unit>
+		<Unit filename="../../src/Main.f90">
+			<Option weight="100" />
+		</Unit>
+		<Unit filename="../../src/RatingCurve_tools.f90">
+			<Option weight="80" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
