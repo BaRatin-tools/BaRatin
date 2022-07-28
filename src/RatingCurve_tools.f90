@@ -11,12 +11,12 @@ module RatingCurve_tools
 !~**********************************************************************
 !~* References:
 !~**********************************************************************
-!~* 2Do List: 
+!~* 2Do List:
 !~**********************************************************************
 !~* Quick description of public procedures:
-!~*		1. GetRCParNumber, number of parameters of the RC
-!~*		2. ApplyRC, compute Q=f(H|teta)
-!~*		3.
+!~*     1. GetRCParNumber, number of parameters of the RC
+!~*     2. ApplyRC, compute Q=f(H|teta)
+!~*     3.
 !~**********************************************************************
 
 use kinds_dmsl_kit ! numeric kind definitions from DMSL
@@ -56,12 +56,12 @@ pure subroutine GetRCParNumber(RCID,npar,ControlMatrix,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. RCID, ID of the rating curve
-!^*		2. [ControlMatrix], optional, control Matrix in Laurent's framework
+!^*     1. RCID, ID of the rating curve
+!^*     2. [ControlMatrix], optional, control Matrix in Laurent's framework
 !^* OUT
-!^*		1. npar, par. number
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*     1. npar, par. number
+!^*     2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     3.mess, error message
 !^**********************************************************************
 
 character(*), intent(in)::RCID
@@ -99,7 +99,7 @@ end subroutine GetRCParNumber
 subroutine ApplyRC(RCID,H,teta,ControlMatrix,Q,feas,err,mess)
 
 !^**********************************************************************
-!^* Purpose: 
+!^* Purpose:
 !^**********************************************************************
 !^* Programmer: Ben Renard, Cemagref Lyon
 !^**********************************************************************
@@ -112,15 +112,15 @@ subroutine ApplyRC(RCID,H,teta,ControlMatrix,Q,feas,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. RCID, ID of the rating curve
-!^*		2. H, water stage
-!^*		3. teta, parameters
-!^*		4. [ControlMatrix], optional, control Matrix in Laurent's framework
+!^*     1. RCID, ID of the rating curve
+!^*     2. H, water stage
+!^*     3. teta, parameters
+!^*     4. [ControlMatrix], optional, control Matrix in Laurent's framework
 !^* OUT
-!^*		1. Q, RC-computed runoff
-!^*		2. feas, feasible?
-!^*		3.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		4.mess, error message
+!^*     1. Q, RC-computed runoff
+!^*     2. feas, feasible?
+!^*     3.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     4.mess, error message
 !^**********************************************************************
 
 character(*), intent(in)::RCID
@@ -157,7 +157,7 @@ case(RC_Power)
 case(RC_Kinetics_Accumulation)
     Q=teta(1) * ( 1._mrk-exp( -teta(2)*H ) )
 case(RC_Kinetics_Elimination)
-    Q=teta(1) * exp( -teta(2)*H ) 
+    Q=teta(1) * exp( -teta(2)*H )
 case(RC_Kinetics_Azziz1)
     Q=teta(1)*teta(2)*teta(3) * ( 1._mrk-exp( -teta(4)*H ) )
 case(RC_Kinetics_Azziz2)
@@ -204,11 +204,11 @@ pure subroutine RC_General_CheckControlMatrix(ControlMatrix,feas,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. ControlMatrix
+!^*     1. ControlMatrix
 !^* OUT
-!^*		1.feas
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*     1.feas
+!^*     2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     3.mess, error message
 !^**********************************************************************
 
 integer(mik), intent(in)::ControlMatrix(:,:)
@@ -274,16 +274,16 @@ pure subroutine RC_General_Continuity(a,c,k,ControlMatrix,b,feas,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.a
-!^*		2.c
-!^*		3.k
-!^*		4.ControlMatrix
+!^*     1.a
+!^*     2.c
+!^*     3.k
+!^*     4.ControlMatrix
 !^* OUT
-!^*		1.feas, feasability
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*     1.feas, feasability
+!^*     2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     3.mess, error message
 !^* INOUT
-!^*		1.b
+!^*     1.b
 !^**********************************************************************
 
 real(mrk), intent(in)::a(:),c(:),k(:)
@@ -300,7 +300,7 @@ err=0;mess='';feas=.true.
 
 ncontrol=size(a)
 
-if(a(1)<=0._mrk .or. c(1)==0._mrk) then 
+if(a(1)<=0._mrk .or. c(1)==0._mrk) then
     feas=.false.;return
 endif
 if(ncontrol<=1) return ! nothing to do - b already specified in the single-range case
@@ -343,13 +343,13 @@ subroutine RC_General_GetRangeFromTeta(H,teta,ControlMatrix,range,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. H
-!^*		2. teta
-!^*		2. ControlMatrix
+!^*     1. H
+!^*     2. teta
+!^*     2. ControlMatrix
 !^* OUT
-!^*		1.range
-!^*		2.err
-!^*		3.mess
+!^*     1.range
+!^*     2.err
+!^*     3.mess
 !^**********************************************************************
 
 real(mrk), intent(in)::H,teta(:)
@@ -387,7 +387,7 @@ do i=1,nk
         range=i;return
     else
         cycle
-    endif      
+    endif
 enddo
 
 range=nk+1
@@ -399,7 +399,7 @@ end subroutine RC_General_GetRangeFromTeta
 subroutine ApplyRC_General(H,teta,ControlMatrix,Q,feas,err,mess)
 
 !^**********************************************************************
-!^* Purpose: General derivation of RC based on controls and ranges 
+!^* Purpose: General derivation of RC based on controls and ranges
 !^* (cf Laurent's formalization)
 !^**********************************************************************
 !^* Programmer: Laurent Bonnifait & Ben Renard, Cemagref Lyon
@@ -413,14 +413,14 @@ subroutine ApplyRC_General(H,teta,ControlMatrix,Q,feas,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. H, stage
-!^*		2. teta, RC parameters
-!^*		3. ControlMatrix, control Matrix in Laurent's framework
+!^*     1. H, stage
+!^*     2. teta, RC parameters
+!^*     3. ControlMatrix, control Matrix in Laurent's framework
 !^* OUT
-!^*		1.Q, runoff
-!^*		2.feas, feasability
-!^*		3.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		4.mess, error message
+!^*     1.Q, runoff
+!^*     2.feas, feasability
+!^*     3.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     4.mess, error message
 !^**********************************************************************
 
 real(mrk), intent(in)::H, teta(:)
@@ -495,10 +495,10 @@ function RC_General_GetRange(H,k)
 !#* 2Do List:
 !#**********************************************************************
 !#* IN
-!#*		1. H
-!#*		2. k
+!#*     1. H
+!#*     2. k
 !#* OUT
-!#*		1.RC_General_GetRange
+!#*     1.RC_General_GetRange
 !#**********************************************************************
 
 real(mrk), intent(in)::H,k(:)
@@ -512,7 +512,7 @@ do i=1,nk
         RC_General_GetRange=i;return
     else
         cycle
-    endif      
+    endif
 enddo
 
 RC_General_GetRange=nk+1

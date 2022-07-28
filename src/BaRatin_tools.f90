@@ -14,9 +14,9 @@ module BaRatin_tools
 !~* 2Do List:
 !~**********************************************************************
 !~* Quick description of public procedures:
-!~*		1.
-!~*		2.
-!~*		3.
+!~*     1.
+!~*     2.
+!~*     3.
 !~**********************************************************************
 
 use kinds_dmsl_kit ! numeric kind definitions from DMSL
@@ -41,20 +41,20 @@ public :: &! main subroutines to handle the probabilistic model behind BaRatin
 
 ! variables globally available to this module
 type, public:: RCType ! the "rating curve" object
-	character(100)::RCID='AintGotNoName' ! RC formula - see RatingCurve_tools for the catalogue
-	integer(mik)::nteta=undefIN ! number of parameters for the rating curve
-	integer(mik)::nobs=undefIN ! number of observations used to fit the RC
-	logical:: Herror=.false. ! is any stage value affected by an error? if not, this is WLS-like fitting
-	integer(mik)::nHerror=undefIN ! number of H values affected by an error
-	real(mrk), allocatable::Hobs(:),Qobs(:) ! observed series of H/Q
-	real(mrk), allocatable::Hsigma(:),Qsigma(:) ! series of H/Q standard errors
+    character(100)::RCID='AintGotNoName' ! RC formula - see RatingCurve_tools for the catalogue
+    integer(mik)::nteta=undefIN ! number of parameters for the rating curve
+    integer(mik)::nobs=undefIN ! number of observations used to fit the RC
+    logical:: Herror=.false. ! is any stage value affected by an error? if not, this is WLS-like fitting
+    integer(mik)::nHerror=undefIN ! number of H values affected by an error
+    real(mrk), allocatable::Hobs(:),Qobs(:) ! observed series of H/Q
+    real(mrk), allocatable::Hsigma(:),Qsigma(:) ! series of H/Q standard errors
     type(PriorListType), allocatable:: PriorList_RemnantSigma(:) ! priors for remnant std - see BayesianEstimation_tools module for PriorListType definition
     type(PriorListType), allocatable:: PriorList_teta(:) ! priors for RC parameters
     integer(mik),allocatable::ControlMatrix(:,:)
-  	integer(mik)::ncontrol=1 ! [only for General-RC] number of hydraulic controls
-  	integer(mik)::nsigmaf=1 ! number of parameters for remnant sdev.
-  	character(250)::RemnantSigma_funk=undefCH
-  	real(mrk)::mv=-9999._mrk
+    integer(mik)::ncontrol=1 ! [only for General-RC] number of hydraulic controls
+    integer(mik)::nsigmaf=1 ! number of parameters for remnant sdev.
+    character(250)::RemnantSigma_funk=undefCH
+    real(mrk)::mv=-9999._mrk
 end type RCType
 type(RCType),public:: RC
 
@@ -73,8 +73,8 @@ subroutine BaRatin_LoadRCobject(Hobs,Hsigma,Qobs,Qsigma,& ! observations and unc
                         RCID,&               ! Rating Curve ID
                         ControlMatrix,& ! optional Control Matrix for Laurent's general formalisation
                         RemnantSigma_funk,& ! chosen f in sdev=f(Qrc)
-				        PriorList_teta,PriorList_RemnantSigma,&
-				        err,mess)! error handling
+                        PriorList_teta,PriorList_RemnantSigma,&
+                        err,mess)! error handling
 !^**********************************************************************
 !^* Purpose: Load RC object
 !^**********************************************************************
@@ -89,18 +89,18 @@ subroutine BaRatin_LoadRCobject(Hobs,Hsigma,Qobs,Qsigma,& ! observations and unc
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. Hobs, observed stage
-!^*		2. Hsigma, std of stage error
-!^*		3. Qobs, observed runoff
-!^*		4. Qsigma, std of runoff error
-!^*		5. RCID, ID of the rating curve
-!^*		6. [ControlMatrix], optional Control Matrix for Laurent's general formalisation
-!^*		7. RemnantSigma_funk, function for remnant sigma
-!^*		8. PriorList_teta, priors for RC parameters
-!^*		9. PriorList_RemnantSigma, priors for remnant sigma parameters
+!^*     1. Hobs, observed stage
+!^*     2. Hsigma, std of stage error
+!^*     3. Qobs, observed runoff
+!^*     4. Qsigma, std of runoff error
+!^*     5. RCID, ID of the rating curve
+!^*     6. [ControlMatrix], optional Control Matrix for Laurent's general formalisation
+!^*     7. RemnantSigma_funk, function for remnant sigma
+!^*     8. PriorList_teta, priors for RC parameters
+!^*     9. PriorList_RemnantSigma, priors for remnant sigma parameters
 !^* OUT
-!^*		1.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		2.mess, error message
+!^*     1.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     2.mess, error message
 !^**********************************************************************
 use RatingCurve_tools, only:GetRCParNumber
 real(mrk), intent(in)::Hobs(:),Hsigma(:),Qobs(:),Qsigma(:)
@@ -185,16 +185,16 @@ subroutine GetLogPost(teta,RemnantSigma,Htrue,& ! inferred quantities
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. teta, RC parameters
-!^*		2. RemnantSigma, std of remnant errors
-!^*		3. Htrue, estimated "true" stage
-!^*		4. RC, rating curve object
+!^*     1. teta, RC parameters
+!^*     2. RemnantSigma, std of remnant errors
+!^*     3. Htrue, estimated "true" stage
+!^*     4. RC, rating curve object
 !^* OUT
-!^*		1.lp, log-posterior
-!^*		2.feas, feasible?
-!^*		3.is null, is (natural) posterior = zero?
-!^*		4.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		5.mess, error message
+!^*     1.lp, log-posterior
+!^*     2.feas, feasible?
+!^*     3.is null, is (natural) posterior = zero?
+!^*     4.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     5.mess, error message
 !^**********************************************************************
 use BayesianEstimation_tools, only:GetLogPrior, PriorListType
 use RatingCurve_tools, only:GetRCParNumber, ApplyRC,RC_General_GetRangeFromTeta
@@ -314,15 +314,15 @@ subroutine Posterior_wrapper(x,feas,isnull,fx,fAux,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.x, teta
+!^*     1.x, teta
 !^* OUT
-!^*		1. see GetLogPost
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*     1. see GetLogPost
+!^*     2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     3.mess, error message
 !^* INOUT
-!^*		1.
-!^*		2.
-!^*		3.
+!^*     1.
+!^*     2.
+!^*     3.
 !^**********************************************************************
 
 real(mrk),intent(in)::x(:)
@@ -367,13 +367,13 @@ end subroutine Posterior_wrapper
 subroutine BaRatin_Fit(RC,& ! Rating curve object
                        !!!!!!! Tuning of the MCMC sampler !!!!!!!!
                        teta0,RemnantSigma0, &!initial values for teta and remnant std
-				       teta_std0,RemnantSigma_std0,& ! initial values for the std of jump distribution
-				       nAdapt,nCycles,&
-				       MinMoveRate,MaxMoveRate,&
-				       DownMult,UpMult,&
+                       teta_std0,RemnantSigma_std0,& ! initial values for the std of jump distribution
+                       nAdapt,nCycles,&
+                       MinMoveRate,MaxMoveRate,&
+                       DownMult,UpMult,&
                        !!!!!!! END Tuning of the MCMC sampler !!!!!!!!
-				       OutFile, & ! Output file (for MCMC samples)
-				       err,mess)! error handling
+                       OutFile, & ! Output file (for MCMC samples)
+                       err,mess)! error handling
 
 
 !^**********************************************************************
@@ -390,12 +390,12 @@ subroutine BaRatin_Fit(RC,& ! Rating curve object
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.RC, rating curve object
-!^*		2 and above: properties of the MCMC sampler
-!^*		3. OutFile, Output file (for MCMC samples)
+!^*     1.RC, rating curve object
+!^*     2 and above: properties of the MCMC sampler
+!^*     3. OutFile, Output file (for MCMC samples)
 !^* OUT
-!^*		1.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		2.mess, error message
+!^*     1.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*     2.mess, error message
 !^**********************************************************************
 use MCMCStrategy_tools, only:Adaptive_Metro_OAAT
 use utilities_dmsl_kit, only:number_string
@@ -460,18 +460,18 @@ headers(RC%nteta+RC%nsigmaf+nHerror+1)="LogPost"
 
 ! GO!
 call Adaptive_Metro_OAAT(f=Posterior_wrapper,x=start,&
-				fx=fx,std=startStd,&
-				nAdapt=nAdapt,nCycles=nCycles,&
-				MinMoveRate=MinMoveRate,MaxMoveRate=MaxMoveRate,&
-				DownMult=DownMult,UpMult=UpMult,&
-				OutFile=OutFile,headers=headers, err=err,mess=mess)
+                fx=fx,std=startStd,&
+                nAdapt=nAdapt,nCycles=nCycles,&
+                MinMoveRate=MinMoveRate,MaxMoveRate=MaxMoveRate,&
+                DownMult=DownMult,UpMult=UpMult,&
+                OutFile=OutFile,headers=headers, err=err,mess=mess)
 
 end subroutine BaRatin_Fit
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine BaRatin_ReadMCMC(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
-				        mcmc,err,mess)! error handling
+                        mcmc,err,mess)! error handling
 !^**********************************************************************
 !^* Purpose: Load MCMC file
 !^**********************************************************************
@@ -486,14 +486,14 @@ subroutine BaRatin_ReadMCMC(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. MCMCFile, containing MCMC samples
-!^*		2. Nburn, number of lines to discard
-!^*		3. Nread, number of lines to read
-!^*		4. Nslim, only one line every Nslim will be used
+!^*     1. MCMCFile, containing MCMC samples
+!^*     2. Nburn, number of lines to discard
+!^*     3. Nread, number of lines to read
+!^*     4. Nslim, only one line every Nslim will be used
 !^* OUT
-!^*		1.mcmc
-!^*		1.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		2.mess, error message
+!^*        1.mcmc
+!^*        1.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        2.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 use RatingCurve_tools, only:RC_General,RC_General_Continuity
@@ -519,28 +519,28 @@ if(err>0) then;call BaRatin_ConsoleMessage(messID_Open,trim(MCMCFile));endif
 read(unt,*,iostat=err) !headers
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(MCMCFile));endif
 do i=1,Nburn ! burn
-	read(unt,*,iostat=errcode)
-	if(errcode/=0) then ! problem reading file
-		err=1;mess=trim(procname)//':'//trim(BaRatin_Message(2));return
-	endif
+    read(unt,*,iostat=errcode)
+    if(errcode/=0) then ! problem reading file
+        err=1;mess=trim(procname)//':'//trim(BaRatin_Message(2));return
+    endif
 enddo
 if(allocated(Temp)) deallocate(Temp);allocate(Temp(Nread,RC%nteta+RC%nsigmaf+RC%nHerror+1))
 do i=1,Nread ! read used lines
-	k=i
-	read(unt,*,iostat=errcode) Temp(i,:)
-	if(errcode/=0) then ! problem reading file
-		err=-1;k=k-1
-		mess=trim(procname)//':'//trim(BaRatin_Message(3));exit
-	endif
+    k=i
+    read(unt,*,iostat=errcode) Temp(i,:)
+    if(errcode/=0) then ! problem reading file
+        err=-1;k=k-1
+        mess=trim(procname)//':'//trim(BaRatin_Message(3));exit
+    endif
 enddo
 close(unt)
 ! Slim
-n=k/Nslim
+n=size(Temp(1:k:nSlim,:),dim=1) ! k/Nslim
 
 ! Extend mcmc table for RC of type RC_General
 if(RC%RCID==RC_General) then
-    if(associated(mcmc)) deallocate(mcmc);allocate(mcmc(n,RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%Ncontrol-1)) ! Add computed b's to all result files
-    mcmc(:,1:(RC%nteta+RC%nsigmaf+RC%nHerror+1))=Temp(1:n:nSlim,:)
+    if(associated(mcmc)) nullify(mcmc);allocate(mcmc(n,RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%Ncontrol-1)) ! Add computed b's to all result files
+    mcmc(:,1:(RC%nteta+RC%nsigmaf+RC%nHerror+1))=Temp(1:k:nSlim,:)
     nMCMC=size(mcmc,dim=1)
     ! retrieve a's, k's and c's
     allocate(aRC(nMCMC,RC%ncontrol),bRC(nMCMC,RC%ncontrol),cRC(nMCMC,RC%ncontrol),kRC(nMCMC,RC%ncontrol-1))
@@ -558,8 +558,8 @@ if(RC%RCID==RC_General) then
     enddo
     mcmc(:,(RC%nteta+RC%nsigmaf+RC%nHerror+2):(RC%nteta+RC%nsigmaf+RC%nHerror+1+RC%ncontrol-1))=bRC(:,2:)
 else
-    if(associated(mcmc)) deallocate(mcmc);allocate(mcmc(n,RC%nteta+RC%nsigmaf+RC%nHerror+1))
-    mcmc=Temp(1:n:nSlim,:)
+    if(associated(mcmc)) nullify(mcmc);allocate(mcmc(n,RC%nteta+RC%nsigmaf+RC%nHerror+1))
+    mcmc=Temp(1:k:nSlim,:)
 endif
 
 end subroutine BaRatin_ReadMCMC
@@ -567,12 +567,12 @@ end subroutine BaRatin_ReadMCMC
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine BaRatin_H2Q(RC,& ! Rating curve object
-                        Hx,Hx_Std,Hx_Bias,Hx_BiasIndx,&
-                        mcmc,nsim,PropagateWhat,&
-                        PrintCounter,RemnantOption,&
-                        SpagFilePrefix,EnvelopFilePrefix,&
-                        SaveSpag,SaveEnvelop,&
-				        err,mess)! error handling
+                       Hx,Hx_Std,Hx_Bias,Hx_BiasIndx,&
+                       mcmc,nsim,PropagateWhat,&
+                       PrintCounter,RemnantOption,&
+                       SpagFilePrefix,EnvelopFilePrefix,&
+                       SaveSpag,SaveEnvelop,&
+                       err,mess)! error handling
 !^**********************************************************************
 !^* Purpose: Generates Q spaghettis
 !^**********************************************************************
@@ -587,23 +587,23 @@ subroutine BaRatin_H2Q(RC,& ! Rating curve object
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		0. RC, rating curve object
-!^*		1. Hx, H values
-!^*		2. [Hx_Std], optional: uncertainty in Hs
-!^*		3. [Hx_Bias], optional: standard deviation of the H-bias term
-!^*		4. [Hx_BiasIndx], optional: index for bias-resampling
-!^*		5. [mcmc], mcmc sample. If not present, will generate teta from the prior
-!^*		6. [nsim], only used for prior sampling, not used is mcmc is provided
-!^*		7. PropagateWhat, 0-1 vector of size 3, propagate h-U, teta-U, remnant-U?
-!^*		8. [PrintCounter], print counter in console during iterations? default .false.
-!^*		9. [RemnantOption], 0=systematic,1=independent,default: see RemnantOption_def
-!^*		10. SpagFilePrefix, prefix for spaghetti file.
-!^*		11. EnvelopFilePrefix, prefix for envelop file.
-!^*		12. SaveSpag, save spag file?
-!^*		13. SaveEnvelop, save envelop file?
+!^*        0. RC, rating curve object
+!^*        1. Hx, H values
+!^*        2. [Hx_Std], optional: uncertainty in Hs
+!^*        3. [Hx_Bias], optional: standard deviation of the H-bias term
+!^*        4. [Hx_BiasIndx], optional: index for bias-resampling
+!^*        5. [mcmc], mcmc sample. If not present, will generate teta from the prior
+!^*        6. [nsim], only used for prior sampling, not used is mcmc is provided
+!^*        7. PropagateWhat, 0-1 vector of size 3, propagate h-U, teta-U, remnant-U?
+!^*        8. [PrintCounter], print counter in console during iterations? default .false.
+!^*        9. [RemnantOption], 0=systematic,1=independent,default: see RemnantOption_def
+!^*        10. SpagFilePrefix, prefix for spaghetti file.
+!^*        11. EnvelopFilePrefix, prefix for envelop file.
+!^*        12. SaveSpag, save spag file?
+!^*        13. SaveEnvelop, save envelop file?
 !^* OUT
-!^*		1.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		2.mess, error message
+!^*        1.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        2.mess, error message
 !^**********************************************************************
 use RatingCurve_tools, only:ApplyRC
 use Distribution_tools, only:Generate,GenerateSample,GAUSS,GetMode
@@ -641,7 +641,6 @@ real(mrk),allocatable::eps(:),spag(:),priorSample(:,:),b(:,:)
 character(250):: fmt
 
 err=0;mess=''
-
 ! basic checks
 if(PropagateWhat(rcol)==1 .and. (.not.present(mcmc))) then
     err=1;mess=trim(procname)//':'//trim(Baratin_Message(7));return
@@ -877,10 +876,10 @@ subroutine BaRatin_PostProcess(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
                         SaveSpag,SaveEnvelop,&
                         propagationMatrix,& ! let the user define what is propagated and what is not
                         HQFile,& ! File containing H/Q obs and uncertainties/envelops
-				        SaveHQ,&
+                        SaveHQ,&
                         CookedMCMCFile, & ! File containing MCMC samples after burning/slimming/adding b's
                         SaveCooked,&
-				        err,mess)! error handling
+                        err,mess)! error handling
 !^**********************************************************************
 !^* Purpose: post-process MCMC samples and write result files for
 !^* subsequent use, in particular for subsequent plots
@@ -896,21 +895,21 @@ subroutine BaRatin_PostProcess(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. MCMCFile, containing MCMC samples
-!^*		2. Nburn, number of lines to discard
-!^*		3. Nread, number of lines to read
-!^*		4. Nslim, only one line every Nslim will be used
-!^*		5. Hx, Hs where the RC will be applied in all post-processings
-!^*		6. RC, rating curve object
-!^*		7. SummaryFile, Result File containing the statistical summary of MCMC samples
-!^*		8. SpagFile, & ! prefix of File containing all RCs corresponding to MCMC samples
-!^*		9. EnvFile, & ! prefix of file contaiing envelops extracted from spaghettis
-!^*		10. propagationMatrix,& ! let the user define what is propagated and what is not
-!^*		11. HQFile, Result File containing H/Q obs and uncertainties/envelops
-!^*		12. CookedMCMCFile, File containing MCMC samples after burning/slimming/adding b's
+!^*        1. MCMCFile, containing MCMC samples
+!^*        2. Nburn, number of lines to discard
+!^*        3. Nread, number of lines to read
+!^*        4. Nslim, only one line every Nslim will be used
+!^*        5. Hx, Hs where the RC will be applied in all post-processings
+!^*        6. RC, rating curve object
+!^*        7. SummaryFile, Result File containing the statistical summary of MCMC samples
+!^*        8. SpagFile, & ! prefix of File containing all RCs corresponding to MCMC samples
+!^*        9. EnvFile, & ! prefix of file contaiing envelops extracted from spaghettis
+!^*        10. propagationMatrix,& ! let the user define what is propagated and what is not
+!^*        11. HQFile, Result File containing H/Q obs and uncertainties/envelops
+!^*        12. CookedMCMCFile, File containing MCMC samples after burning/slimming/adding b's
 !^* OUT
-!^*		1.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		2.mess, error message
+!^*        1.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        2.mess, error message
 !^**********************************************************************
 use EmpiricalStats_tools, only:GetEmpiricalStats,GetEmpiricalQuantile
 use utilities_dmsl_kit, only:number_string
@@ -969,7 +968,7 @@ err=0;mess=''
 
 ! Read MCMC
 call BaRatin_ReadMCMC(trim(MCMCFile),Nburn,Nread,Nslim,& ! Read properties
-				        mcmc,err,mess)! error handling
+                        mcmc,err,mess)! error handling
 if(err>0) then; mess=trim(procname)//':'//trim(mess);return;endif
 nMCMC=size(mcmc,dim=1);nCol=size(mcmc,dim=2)
 ml=maxloc(mcmc(:,RC%nteta+RC%nsigmaf+RC%nHerror+1))
@@ -1041,11 +1040,9 @@ if(SaveSummary) then
     close(1)
 endif
 
-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! STEP 2 : spaghetti & envelop files !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 do i=1,size(propagationMatrix,dim=1)
     call BaRatin_H2Q(RC=RC,& ! Rating curve object
                      Hx=Hx,&
@@ -1054,8 +1051,8 @@ do i=1,size(propagationMatrix,dim=1)
                      PropagateWhat=propagationMatrix(i,:),&
                      SpagFilePrefix=SpagFile,&
                      EnvelopFilePrefix=EnvFile,&
-				     SaveSpag=SaveSPag,SaveEnvelop=SaveEnvelop,&
-				     err=err,mess=mess)! error handling
+                     SaveSpag=SaveSPag,SaveEnvelop=SaveEnvelop,&
+                     err=err,mess=mess)! error handling
     if(err>0) then; mess=trim(procname)//':'//trim(mess);return;endif
 enddo
 
@@ -1109,7 +1106,7 @@ subroutine BaRatin_Propagation(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
                         EnvFile, & ! prefix of file contaiing envelops extracted from spaghettis
                         SaveSpag,SaveEnvelop,&
                         propagationMatrix,& ! let the user define what is propagated and what is not
-				        err,mess)! error handling
+                        err,mess)! error handling
 !^**********************************************************************
 !^* Purpose: Propagates RC uncertainty from H to Q
 !^**********************************************************************
@@ -1124,18 +1121,18 @@ subroutine BaRatin_Propagation(MCMCFile,Nburn,Nread,Nslim,& ! Read properties
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1. MCMCFile, containing MCMC samples
-!^*		2. Nburn, number of lines to discard
-!^*		3. Nread, number of lines to read
-!^*		4. Nslim, only one line every Nslim will be used
-!^*		5. Hfile, File containing Hs where the RC is applied + Sdev of Hs
-!^*		6. RC, rating curve object
-!^*		7. SpagFile, & ! prefix of File containing all RCs corresponding to MCMC samples
-!^*		8. EnvFile, & ! prefix of file contaiing envelops extracted from spaghettis
-!^*		9. propagationMatrix,& ! let the user define what is propagated and what is not
+!^*        1. MCMCFile, containing MCMC samples
+!^*        2. Nburn, number of lines to discard
+!^*        3. Nread, number of lines to read
+!^*        4. Nslim, only one line every Nslim will be used
+!^*        5. Hfile, File containing Hs where the RC is applied + Sdev of Hs
+!^*        6. RC, rating curve object
+!^*        7. SpagFile, & ! prefix of File containing all RCs corresponding to MCMC samples
+!^*        8. EnvFile, & ! prefix of file contaiing envelops extracted from spaghettis
+!^*        9. propagationMatrix,& ! let the user define what is propagated and what is not
 !^* OUT
-!^*		1.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		2.mess, error message
+!^*        1.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        2.mess, error message
 !^**********************************************************************
 use DataRW_tools, only:DatRead
 use utilities_dmsl_kit,only:number_string
@@ -1159,7 +1156,7 @@ if(err>0) then; mess=trim(procname)//':'//trim(mess);return;endif
 
 ! Read MCMC
 call BaRatin_ReadMCMC(trim(MCMCFile),Nburn,Nread,Nslim,& ! Read properties
-				        mcmc,err,mess)! error handling
+                        mcmc,err,mess)! error handling
 if(err>0) then; mess=trim(procname)//':'//trim(mess);return;endif
 nMCMC=size(mcmc,dim=1)
 
@@ -1177,8 +1174,8 @@ do i=1,size(propagationMatrix,dim=1)
                         PrintCounter=.true.,&
                         SpagFilePrefix=SpagFile,&
                         EnvelopFilePrefix=EnvFile,&
-				        SaveSpag=SaveSpag,SaveEnvelop=SaveEnvelop,&
-				        err=err,mess=mess)! error handling
+                        SaveSpag=SaveSpag,SaveEnvelop=SaveEnvelop,&
+                        err=err,mess=mess)! error handling
     if(err>0) then; mess=trim(procname)//':'//trim(mess);return;endif
     write(*,'(A50)') 'ooooooooooooooooooooooooooooooooooooooooooo'
 enddo
@@ -1202,11 +1199,11 @@ pure subroutine Sigmafunk_GetParNumber(funk, npar, err, mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.funk, which function?? (e.g., 'Linear')
+!^*        1.funk, which function?? (e.g., 'Linear')
 !^* OUT
-!^*		1.npar
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1.npar
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 character(*), intent(in)::funk
 integer(mik), intent(out)::npar
@@ -1247,13 +1244,13 @@ pure subroutine Sigmafunk_Apply(funk, par, Qrc, res, err, mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.funk, which function?? (e.g., 'Constant','Linear')
-!^*		2.par, parameters of funk
-!^*		3.Qrc, Q given by the rating curve
+!^*        1.funk, which function?? (e.g., 'Constant','Linear')
+!^*        2.par, parameters of funk
+!^*        3.Qrc, Q given by the rating curve
 !^* OUT
-!^*		1.res, result
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1.res, result
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 character(*), intent(in)::funk
 real(mrk), intent(in)::par(:),Qrc
@@ -1304,11 +1301,11 @@ subroutine BaRatinConfig_Read_Workspace(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_RunOptions
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_RunOptions
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -1352,11 +1349,11 @@ subroutine BaRatinConfig_Read_Data(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_Data
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_Data
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -1415,11 +1412,11 @@ subroutine BaRatinConfig_Read_MCMC(file,teta0,RemnantSigma0,smallStd,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file,teta0,RemnantSigma0,smallStd
+!^*        1.file,teta0,RemnantSigma0,smallStd
 !^* OUT
-!^*		1. All parameters in Config_MCMC + starting stds
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_MCMC + starting stds
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -1464,8 +1461,8 @@ read(unt,*,iostat=err) InitStdMode
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 ! Handling of initial jump stdev
 nteta=size(teta0)
-if(associated(teta_std0)) deallocate(teta_std0);allocate(teta_std0(nTeta))
-if(associated(RemnantSigma_std0)) deallocate(RemnantSigma_std0);allocate(RemnantSigma_std0(size(RemnantSigma0)))
+if(associated(teta_std0)) nullify(teta_std0);allocate(teta_std0(nTeta))
+if(associated(RemnantSigma_std0)) nullify(RemnantSigma_std0);allocate(RemnantSigma_std0(size(RemnantSigma0)))
 if(InitStdMode==1) then
     if(allocated(stdFactorV)) deallocate(stdFactorV);allocate(stdFactorV(nTeta))
     read(unt,*,iostat=err)
@@ -1529,11 +1526,11 @@ subroutine BaRatinConfig_Read_RatingCurve(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_RatingCurve + prior lists
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_RatingCurve + prior lists
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 use Distribution_tools, only:GetParNumber
@@ -1557,8 +1554,8 @@ read(unt,*,iostat=err) RCID
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) nTeta
 if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-if(associated(PriorList_teta)) deallocate(PriorList_teta);allocate(PriorList_teta(nTeta))
-if(associated(teta0)) deallocate(teta0);allocate(teta0(nTeta))
+if(associated(PriorList_teta)) nullify(PriorList_teta);allocate(PriorList_teta(nTeta))
+if(associated(teta0)) nullify(teta0);allocate(teta0(nTeta))
 do i=1,nteta
     read(unt,*,iostat=err)
     if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
@@ -1598,11 +1595,11 @@ subroutine BaRatinConfig_Read_ControlMatrix(file,nTeta,nElementalRC,nHeaderContr
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_ControlMatrix
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_ControlMatrix
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit,number_string
 use RatingCurve_tools, only:RC_General_CheckControlMatrix
@@ -1630,7 +1627,7 @@ open(unit=unt,file=trim(file), status='old', iostat=err)
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Open,trim(file));endif
 
 ncontrol=nTeta/nElementalRC
-if(associated(ControlMatrix)) deallocate(ControlMatrix);allocate(ControlMatrix(ncontrol,ncontrol))
+if(associated(ControlMatrix)) nullify(ControlMatrix);allocate(ControlMatrix(ncontrol,ncontrol))
 call ReadData_i(DataFile=file,unt=unt,&
                 nrow=ncontrol,ncol=ncontrol,nHeader=nHeaderControlMatrix,&
                 X=ControlMatrix,err=err,mess=mess)
@@ -1661,11 +1658,11 @@ subroutine BaRatinConfig_Read_RemnantSigma(file,RCID,ncontrol,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file,RCID,ncontrol,
+!^*        1.file,RCID,ncontrol,
 !^* OUT
-!^*		1. All parameters in Config_ControlMatrix + prior lists
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_ControlMatrix + prior lists
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 use Distribution_tools, only:GetParNumber
@@ -1697,8 +1694,8 @@ if(err/=0) then;mess=trim(procname)//':'//trim(mess);return;endif
 if(SigmaFunk_np0/=SigmaFunk_np) then
     err=1;mess=trim(procname)//':'//Baratin_message(4);return
 endif
-if(associated(RemnantSigma0)) deallocate(RemnantSigma0);allocate(RemnantSigma0(SigmaFunk_np))
-if(associated(PriorList_RemnantSigma)) deallocate(PriorList_RemnantSigma);allocate(PriorList_RemnantSigma(SigmaFunk_np))
+if(associated(RemnantSigma0)) nullify(RemnantSigma0);allocate(RemnantSigma0(SigmaFunk_np))
+if(associated(PriorList_RemnantSigma)) nullify(PriorList_RemnantSigma);allocate(PriorList_RemnantSigma(SigmaFunk_np))
 !read each parameter block
 do i=1,SigmaFunk_np
     read(unt,*,iostat=err)
@@ -1738,11 +1735,11 @@ subroutine BaRatinConfig_Read_RunOptions(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_RunOptions
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_RunOptions
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -1783,9 +1780,9 @@ end subroutine BaRatinConfig_Read_RunOptions
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine BaRatinConfig_Read_PriorRC(file,Nsim,Hx,&
-                                   SaveSpag,SpagPrefix,&
-                                   SaveEnvelop,EnvelopPrefix,&
-                                   err,mess)
+                                      SaveSpag,SpagPrefix,&
+                                      SaveEnvelop,EnvelopPrefix,&
+                                      err,mess)
 
 !^**********************************************************************
 !^* Purpose: Read Config_PriorRC
@@ -1801,11 +1798,11 @@ subroutine BaRatinConfig_Read_PriorRC(file,Nsim,Hx,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_PriorRC
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_PriorRC
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -1829,8 +1826,8 @@ if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) Hmin,Hmax,Hstep
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 nHx=ceiling((Hmax-Hmin)/Hstep)+1
-if(associated(Hx)) deallocate(Hx);allocate(Hx(nHx))
-Hx=(/(Hmin+i*Hstep,i=0,NHx)/)
+if(associated(Hx)) nullify(Hx);allocate(Hx(nHx))
+Hx=(/(Hmin+i*Hstep,i=0,NHx-1)/)
 read(unt,*,iostat=err) saveSpag
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) SpagPrefix
@@ -1869,11 +1866,11 @@ subroutine BaRatinConfig_Read_PostProcessing(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_PostProcessing
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_PostProcessing
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -1921,8 +1918,8 @@ if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) Hmin,Hmax,Hstep
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 nHx=ceiling((Hmax-Hmin)/Hstep)+1
-if(associated(Hx)) deallocate(Hx);allocate(Hx(nHx))
-Hx=(/(Hmin+i*Hstep,i=0,NHx)/)
+if(associated(Hx)) nullify(Hx);allocate(Hx(nHx))
+Hx=(/(Hmin+i*Hstep,i=0,NHx-1)/)
 read(unt,*,iostat=err) saveSpag
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) SpagPrefix
@@ -1933,7 +1930,7 @@ read(unt,*,iostat=err) EnvelopPrefix
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) nrow
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-if(associated(PropMatrix)) deallocate(PropMatrix);allocate(PropMatrix(nrow,ncol))
+if(associated(PropMatrix)) nullify(PropMatrix);allocate(PropMatrix(nrow,ncol))
 PropMatrix=0
 do i=1,nrow
     read(unt,*,iostat=err) PropMatrix(i,(/tcol,rcol/))
@@ -1966,11 +1963,11 @@ subroutine BaRatinConfig_Read_H2QPropagation(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_H2QPropagation
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_H2QPropagation
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -2002,7 +1999,7 @@ read(unt,*,iostat=err) EnvelopPrefix
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 read(unt,*,iostat=err) nrow
 if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
-if(associated(PropMatrix)) deallocate(PropMatrix);allocate(PropMatrix(nrow,ncol))
+if(associated(PropMatrix)) nullify(PropMatrix);allocate(PropMatrix(nrow,ncol))
 do i=1,nrow
     read(unt,*,iostat=err) PropMatrix(i,:)
     if(err>0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
@@ -2033,11 +2030,11 @@ subroutine BaRatinConfig_Read_Aggregation(file,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file
+!^*        1.file
 !^* OUT
-!^*		1. All parameters in Config_BaRatinAggregator
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1. All parameters in Config_BaRatinAggregator
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -2370,14 +2367,14 @@ subroutine BaRatin_ReadData(file,nrow,ncol,nHeader,&
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.file, DataFile
-!^*		2.nrow (WITHOUT header lines)
-!^*		3.ncol
-!^*		4.nHeader, number of skipped header lines
+!^*        1.file, DataFile
+!^*        2.nrow (WITHOUT header lines)
+!^*        3.ncol
+!^*        4.nHeader, number of skipped header lines
 !^* OUT
-!^*		1.Hobs,Qobs,Hsigma,Qsigma
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1.Hobs,Qobs,Hsigma,Qsigma
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 use utilities_dmsl_kit,only:getSpareUnit
 character(*), intent(in)::file
@@ -2408,10 +2405,10 @@ do i=1,nrow
     if(err/=0) then;call BaRatin_ConsoleMessage(messID_Read,trim(file));endif
 enddo
 close(unt)
-if(associated(Hobs)) deallocate(Hobs);
-if(associated(Qobs)) deallocate(Qobs);
-if(associated(Hsigma)) deallocate(Hsigma);
-if(associated(Qsigma)) deallocate(Qsigma);
+if(associated(Hobs)) nullify(Hobs);
+if(associated(Qobs)) nullify(Qobs);
+if(associated(Hsigma)) nullify(Hsigma);
+if(associated(Qsigma)) nullify(Qsigma);
 allocate(Hobs(nrow),Qobs(nrow),Hsigma(nrow),Qsigma(nrow))
 Hobs=X(:,HobsCol)
 Qobs=X(:,QobsCol)
@@ -2437,14 +2434,14 @@ subroutine ReadData_i(DataFile,unt,nrow,ncol,nHeader,X,err,mess)
 !^* 2Do List:
 !^**********************************************************************
 !^* IN
-!^*		1.DataFile
-!^*		2.nrow (WITHOUT header lines)
-!^*		3.ncol
-!^*		4.nHeader, number of skipped header lines
+!^*        1.DataFile
+!^*        2.nrow (WITHOUT header lines)
+!^*        3.ncol
+!^*        4.nHeader, number of skipped header lines
 !^* OUT
-!^*		1.X
-!^*		2.err, error code; <0:Warning, ==0:OK, >0: Error
-!^*		3.mess, error message
+!^*        1.X
+!^*        2.err, error code; <0:Warning, ==0:OK, >0: Error
+!^*        3.mess, error message
 !^**********************************************************************
 character(*), intent(in)::DataFile
 integer(mik), intent(in)::nrow,ncol,nHeader,unt

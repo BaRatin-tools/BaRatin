@@ -73,7 +73,7 @@ logical(mlk)::feas,exist
 !DEC$ ELSEIF DEFINED(__linux)
     dirsep=dirSepCH_lix
 !DEC$ ELSE
-    dirsep=dirSepCH_win
+    dirsep=dirSepCH_lix
 !DEC$ ENDIF
 
 ! Welcome user and read Workspace
@@ -150,8 +150,8 @@ call BaRatin_LoadRCobject(Hobs,Hsigma,Qobs,Qsigma,& ! observations and uncertain
                         RCID,&               ! Rating Curve ID
                         ControlMatrix,& ! optional Control Matrix for Laurent's general formalisation
                         RemnantSigma_funk,& ! [option 2] chosen f in sdev=f(Qrc)
-				        PriorList_teta,PriorList_RemnantSigma,&
-				        err,mess)! error handling
+                        PriorList_teta,PriorList_RemnantSigma,&
+                        err,mess)! error handling
 if(err>0) then; call BaRatin_ConsoleMessage(-1,trim(mess));endif
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -170,9 +170,9 @@ if(DoPriorRC) then
                         PropagateWhat=(/0,1,0/),&
                         SpagFilePrefix=trim(workspace)//dirsep//trim(SpagPrefix_prior),&
                         EnvelopFilePrefix=trim(workspace)//dirsep//trim(EnvelopPrefix_prior),&
-				        SaveSpag=SaveSpag_prior,&
-				        SaveEnvelop=SaveEnvelop_prior,&
-				        err=err,mess=mess)! error handling
+                        SaveSpag=SaveSpag_prior,&
+                        SaveEnvelop=SaveEnvelop_prior,&
+                        err=err,mess=mess)! error handling
     if(err>0) then; call BaRatin_ConsoleMessage(-1,trim(mess));endif
     call BaRatin_ConsoleMessage(3,'')
 endif
@@ -197,13 +197,13 @@ if (DoMCMC) then
     call BaRatin_Fit(RC=RC,&
                      !!!!!!! Tuning of the MCMC sampler !!!!!!!!
                      teta0=teta0,RemnantSigma0=RemnantSigma0, &!initial values for teta and remnant std
-				     teta_std0=teta_std0,RemnantSigma_std0=RemnantSigma_std0,& ! initial values for the std of jump distribution
-				     nAdapt=nAdapt,nCycles=nCycles,&
-				     MinMoveRate=MinMoveRate,MaxMoveRate=MaxMoveRate,&
-				     DownMult=DownMult,UpMult=UpMult,&
+                     teta_std0=teta_std0,RemnantSigma_std0=RemnantSigma_std0,& ! initial values for the std of jump distribution
+                     nAdapt=nAdapt,nCycles=nCycles,&
+                     MinMoveRate=MinMoveRate,MaxMoveRate=MaxMoveRate,&
+                     DownMult=DownMult,UpMult=UpMult,&
                      !!!!!!! END Tuning of the MCMC sampler !!!!!!!!
-				     OutFile=trim(workspace)//dirsep//trim(MCMCfile), & ! Output file (for MCMC samples)
-				     err=err,mess=mess)! error handling
+                     OutFile=trim(workspace)//dirsep//trim(MCMCfile), & ! Output file (for MCMC samples)
+                     err=err,mess=mess)! error handling
     if(err>0) then; call BaRatin_ConsoleMessage(-5,trim(mess));endif
     if(.not.saveMCMC) then
         open(unit=666,file=trim(workspace)//dirsep//trim(MCMCfile),status='old')
@@ -227,6 +227,7 @@ if(DoPostProcess) then
                                    PropMatrix=PropMatrix_post,&
                                    err=err,mess=mess)
     if(err>0) then; call BaRatin_ConsoleMessage(-3,trim(mess));endif
+
     call BaRatin_PostProcess(MCMCFile=trim(workspace)//dirsep//trim(MCMCfile),&
                             Nburn=Nburn,Nread=Nread,Nslim=Nslim,& ! Read properties
                             Hx=Hx,&
@@ -239,9 +240,9 @@ if(DoPostProcess) then
                             SaveEnvelop=SaveEnvelop_post,&
                             propagationMatrix=PropMatrix_post,& ! let the user define what is propagated and what is not
                             HQFile=trim(workspace)//dirsep//trim(HQFile),& ! File containing H/Q obs and uncertainties/envelops
-				            SaveHQ=SaveHQ,&
+                            SaveHQ=SaveHQ,&
                             CookedMCMCFile=trim(workspace)//dirsep//trim(CookedFile),SaveCooked=SaveCooked,&
-				            err=err,mess=mess)! error handling
+                            err=err,mess=mess)! error handling
     if(err>0) then; call BaRatin_ConsoleMessage(-6,trim(mess));endif
     call BaRatin_ConsoleMessage(7, '')
 endif
@@ -266,7 +267,7 @@ if(DoH2Q) then
                         SaveSpag=SaveSpag_prop,&
                         SaveEnvelop=SaveEnvelop_prop,&
                         propagationMatrix=PropMatrix_prop,& ! let the user define what is propagated and what is not
-				        err=err,mess=mess)
+                        err=err,mess=mess)
     if(err>0) then; call BaRatin_ConsoleMessage(-1,trim(mess));endif
     call BaRatin_ConsoleMessage(9, '')
 endif
