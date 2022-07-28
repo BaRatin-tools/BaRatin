@@ -1,0 +1,11 @@
+"GrandCanal/HH.BAD"          ! path to file containing limnograph + uncertainty
+.true.                   ! Save spaghettis to file?
+"Results_Qt_Spaghetti"   ! prefix for file name
+.true.                   ! Save envelops to file?
+"Results_Qt_Envelop"     ! prefix for file name
+5                        ! number of rows of propagation matrix
+1,0,0                    ! propagation matrix, row 1
+0,1,0                    ! propagation matrix, row 2
+0,0,1                    ! propagation matrix, row 3
+1,1,0                    ! propagation matrix, row 4
+1,1,1                    ! propagation matrix, row 5

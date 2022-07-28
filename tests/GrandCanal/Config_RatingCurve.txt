@@ -1,0 +1,26 @@
+RC_General                 ! Rating Curve ID 
+6                          ! Number of parameters teta for the RC 
+** parameter 1 **          ! Cosmetics
+2.18                       ! Initial guess
+'Gaussian'                 ! Prior distribution
+2.18,0.025                 ! Prior parameters
+** parameter 2 **          ! Cosmetics
+0.                         ! Initial guess
+'Gaussian'                 ! Prior distribution
+0,0.025                    ! Prior parameters 
+** parameter 3 **          ! Cosmetics
+1.57                       ! Initial guess
+'Gaussian'                 ! Prior distribution
+1.57,0.025                 ! Prior parameters
+** parameter 4 **          ! Cosmetics
+0.92                       ! Initial guess
+'Gaussian'                 ! Prior distribution
+0.92,0.025                 ! Prior parameters
+** parameter 5 **          ! Cosmetics
+1.0                        ! Initial guess
+'Gaussian'                 ! Prior distribution
+1.0,0.05                   ! Prior parameters 
+** parameter 6 **          ! Cosmetics
+1.5                        ! Initial guess
+'Gaussian'                 ! Prior distribution
+1.5,0.025                  ! Prior parameters

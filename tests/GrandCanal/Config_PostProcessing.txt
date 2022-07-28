@@ -1,0 +1,19 @@
+**** Cooked MCMC runs ****            ! Cosmetics
+.true.                                ! Save results to file?
+"Results_MCMCcooked.txt"              ! File name
+**** Summary of MCMC runs ****        ! Cosmetics
+.true.                                ! Save results to file?
+"Results_MCMCsummary.txt"             ! File name
+**** Summary of H-Q gauging data **** ! Cosmetics
+.true.                                ! Save results to file?
+"Results_HQ.txt"                      ! File name
+**** Rating curves ****               ! Cosmetics
+0,1.3,0.013684210526315788            ! H-grid where RC is evaluated (hmin,hmax,step)
+.true.                                ! Save spaghettis to file?
+"Results_RC_Post_Spaghetti"           ! prefix for file name
+.true.                                ! Save envelops to file?
+"Results_RC_Post_Envelop"             ! prefix for file name
+3                                     ! number of rows of propagation matrix
+1,0                                   ! propagation matrix, row 1
+0,1                                   ! propagation matrix, row 2
+1,1                                   ! propagation matrix, row 3

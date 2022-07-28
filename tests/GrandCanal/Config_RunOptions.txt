@@ -1,0 +1,4 @@
+.true.  ! Do Prior RC?
+.true.  ! Do MCMC?
+.true.  ! Do PostProcessing?
+.true.  ! Do H2Q propagation?

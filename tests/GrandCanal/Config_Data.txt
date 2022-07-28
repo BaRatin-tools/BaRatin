@@ -1,0 +1,8 @@
+'GrandCanal/XY.BAD' 		!!! Absolute path to data file
+1           				!!! number of header lines
+10         				!!! Nobs, number of rows in data file (excluding header lines)
+4       				    !!! number of columns in the data file
+1           				!!! column for Hobs (observed stage) in data file
+2     					!!! column for Hsigma (uncertainty in stage, EXPRESSED AS A STANDARD DEVIATION - use 0 for a no-error assumption)
+3     					!!! column for Qobs (observed runoff gauging) in data file
+4					    !!! column for Qsigma (uncertainty in runoff gauging, EXPRESSED AS A STANDARD DEVIATION - use 0 for a no-error assumption)
