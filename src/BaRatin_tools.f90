@@ -1214,7 +1214,7 @@ character(250),parameter::procname='Sigmafunk_GetParNumber'
 
 err=0;mess='';npar=undefIN
 select case(trim(funk))
-case('Constant')
+case('Constant','Proportional')
     npar=1
 case('Linear')
     npar=2
@@ -1269,6 +1269,8 @@ if(size(par)/=npar) then;err=1;mess=trim(procname)//trim(Baratin_message(5));ret
 select case(trim(funk))
 case('Constant')
     res=par(1)
+case('Proportional')
+    res=par(1)*Qrc
 case('Linear')
     res=par(1)+par(2)*Qrc
 case('Exponential')

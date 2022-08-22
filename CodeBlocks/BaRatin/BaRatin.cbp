@@ -49,6 +49,9 @@
 		<Unit filename="../../../BMSL/src/EmpiricalStats_tools.f90">
 			<Option weight="44" />
 		</Unit>
+		<Unit filename="../../../BMSL/src/Geodesy_tools.f90">
+			<Option weight="47" />
+		</Unit>
 		<Unit filename="../../../BMSL/src/MCMCStrategy_tools.f90">
 			<Option weight="54" />
 		</Unit>
