@@ -831,23 +831,37 @@ integer(mik), intent(out)::err
 character(*),intent(out)::mess
 ! locals
 character(250),parameter::procname='BaRatin_GetEnvelop'
-integer(mik)::i
-logical::feas
-real(mrk)::std,arr(size(Spag))
+logical,parameter::removeMV=.true.
+real(mrk),parameter::maxMVrate=0.75_mrk
+integer(mik)::n
+logical::feas,mask(size(Spag))
+real(mrk)::std
+real(mrk), allocatable::arr(:)
+
+err=0;mess=''
+n=Size(Spag)
+mask=(Spag==RC%mv);
+if(removeMV .and. real(count(mask),mrk)/real(n,mrk) < maxMVrate) then
+    if(allocated(arr)) deallocate(arr);allocate(arr(count(.not.mask)))
+    arr=pack(Spag,.not.mask)
+else
+    if(allocated(arr)) deallocate(arr);allocate(arr(n))
+    arr=Spag
+endif
 
 ! Max-Post RC
 Call ApplyRC(RCID=RC%RCID,H=Hx,teta=mode,&
-                ControlMatrix=RC%ControlMatrix,Q=Env(1),&
-                feas=feas,err=err,mess=mess)
+             ControlMatrix=RC%ControlMatrix,Q=Env(1),&
+             feas=feas,err=err,mess=mess)
 if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
 if(.not.feas) Env(1)=RC%mv
 ! Envelops
 ! Sort outside of quantiles subs to decrease computing time
-arr=Spag;call quicksort(arr=arr,ascnd=.true.,err=err)
+call quicksort(arr=arr,ascnd=.true.,err=err)
 if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
-call GetEmpiricalStats(x=Spag,std=std,err=err,mess=mess)
+call GetEmpiricalStats(x=arr,std=std,err=err,mess=mess)
 if(err>0) then;mess=trim(procname)//':'//trim(mess);return;endif
-if(any(Spag==RC%mv)) then
+if(any(arr==RC%mv)) then
     Env(7)=RC%mv;Env(8)=RC%mv
 else
     Env(7)=Env(1)-std;Env(8)=Env(1)+std
