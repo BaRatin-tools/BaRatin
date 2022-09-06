@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{A695CF68-484F-48E3-8B3F-8FD022989177}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole" StackReserveSize="1900000000"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole" StackReserveSize="1900000000"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<Filter Name="BMSL">
+		<File RelativePath="..\..\..\BMSL\src\Aggregation_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\BayesianEstimation_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\DataRW_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\Dates_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\Distribution_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\EmpiricalStats_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\MCMC_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\MCMCStrategy_tools.f90"/>
+		<File RelativePath="..\..\..\BMSL\src\TimeSeries_tools.f90"/></Filter>
+		<Filter Name="miniDMSL">
+		<File RelativePath="..\..\..\miniDMSL\src\kinds_dmsl_kit.f90"/>
+		<File RelativePath="..\..\..\miniDMSL\src\linalg_dmsl_kit.f90"/>
+		<File RelativePath="..\..\..\miniDMSL\src\mt19937-64.f95"/>
+		<File RelativePath="..\..\..\miniDMSL\src\numerix_dmsl_kit.f90"/>
+		<File RelativePath="..\..\..\miniDMSL\src\types_dmsl_kit.f90"/>
+		<File RelativePath="..\..\..\miniDMSL\src\uniran1_minidmsl_mod.f90"/>
+		<File RelativePath="..\..\..\miniDMSL\src\utilities_dmsl_kit.f90"/></Filter>
+		<File RelativePath="..\..\src\BaRatin_tools.f90"/>
+		<File RelativePath="..\..\src\Main.f90"/>
+		<File RelativePath="..\..\src\RatingCurve_tools.f90"/></Filter></Files>
+	<Globals/></VisualStudioProject>
