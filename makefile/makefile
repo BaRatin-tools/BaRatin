@@ -28,7 +28,6 @@ BMSL = \
 	$(BMSL_DIR)Aggregation_tools.f90             \
 	$(BMSL_DIR)EmpiricalStats_tools.f90          \
 	$(BMSL_DIR)TimeSeries_tools.f90              \
-	$(BMSL_DIR)Geodesy_tools.f90                 \
 	$(BMSL_DIR)DataRW_tools.f90                  \
 	$(BMSL_DIR)Distribution_tools.f90            \
 	$(BMSL_DIR)MCMC_tools.f90                    \
