@@ -139,10 +139,8 @@ RC%nHerror=nHerror
 ! priors
 if(allocated(RC%PriorList_teta)) deallocate(RC%PriorList_teta);allocate(RC%PriorList_teta(RC%nteta))
 RC%PriorList_teta=PriorList_teta
-if(allocated(RC%PriorList_RemnantSigma)) then
-    deallocate(RC%PriorList_RemnantSigma)
-    allocate(RC%PriorList_RemnantSigma(size(PriorList_RemnantSigma)))
-endif
+if(allocated(RC%PriorList_RemnantSigma)) deallocate(RC%PriorList_RemnantSigma)
+allocate(RC%PriorList_RemnantSigma(size(PriorList_RemnantSigma)))
 RC%PriorList_RemnantSigma=PriorList_RemnantSigma
 ! control matrix
 if(present(ControlMatrix)) then
