@@ -1,4 +1,7 @@
 # BaRatin
+
+[![DOI](https://zenodo.org/badge/518358713.svg)](https://zenodo.org/badge/latestdoi/518358713)
+
 *(english follows)*
 
 BaRatin (BAyesian RATINg curve) est une méthode d'estimation des courbes de tarage et des incertitudes associées à l'aide d'un formalisme bayésien. Ce dépôt contient le code de calcul de BaRatin, implémenté sous la forme d'un exécutable Fortran.
