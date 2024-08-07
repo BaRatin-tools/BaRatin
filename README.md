@@ -8,7 +8,7 @@ BaRatin (BAyesian RATINg curve) est une méthode d'estimation des courbes de tar
 L'exécutable peut être recompilé en utilisant le makefile ou un des projets Code::Blocks / IVF fournis. Les fichiers sources issus des projets ci-dessous seront nécessaires: 
 
 1. [BMSL](https://github.com/benRenard/BMSL)
-2. miniDMSL (bientôt disponible !)
+2. [miniDMSL](https://github.com/benRenard/miniDMSL)
 
 ---
 
@@ -16,5 +16,5 @@ L'exécutable peut être recompilé en utilisant le makefile ou un des projets C
 *The executable can be recompiled from sources using the provided makefile or Code::Blocks / IVF projects. Files from the following projects are needed for this purpose:*
 
 1. [BMSL](https://github.com/benRenard/BMSL)
-2. miniDMSL (available soon!)
+2. [miniDMSL](https://github.com/benRenard/miniDMSL)
 
